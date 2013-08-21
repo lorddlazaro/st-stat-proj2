@@ -88,7 +88,7 @@ public class View extends JFrame {
 		/*
 		 * FRAME PROPERTIES
 		 */
-		setTitle("Hypergeometric Distribution");
+		setTitle("Hypergeometric Probability Distribution");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
 		setLocationRelativeTo(null);
@@ -302,8 +302,7 @@ public class View extends JFrame {
 		tab1.add(graphPanel);
 		tab1.add(answerPanel);
 		tab1.add(probDistPanel);
-	}
-	
+	}	
 	
 	/*
 	 * MENU ITEM AddListener METHODS
@@ -382,6 +381,10 @@ public class View extends JFrame {
 		lblProbability.setText(str);
 	}
 	
+	/**
+	 * Draws the graph to the UI
+	 * @param graph - graph to be drawn
+	 */
 	public void drawGraph(JFreeChart graph) {
 		graphTabs.addTab("Graph_"+graphCtr, null, new ChartPanel(graph), null);
 		graphTabs.setSelectedIndex(graphCtr-1);
