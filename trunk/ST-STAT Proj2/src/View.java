@@ -20,6 +20,9 @@ import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JTable;
 
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+
 /**
  * VIEW:
  * Handles all GUI related code
@@ -29,6 +32,9 @@ public class View extends JFrame {
 	
 	private JMenuBar menuBar;
 	private JMenu mnProject;
+	private JMenuItem mntmClearFields;
+	private JMenuItem mntmSpecifications;
+	private JMenuItem mntmHelp;
 	
 	private JTabbedPane tabbedPane;
 	private JPanel tab1;
@@ -61,11 +67,11 @@ public class View extends JFrame {
 	
 	private JButton btnSolve;
 	private JLabel lblProbability;
-	private JMenuItem mntmClearFields;
-	private JMenuItem mntmSpecifications;
-	private JMenuItem mntmAbout;
-	private JTable tblProbDist;
 	
+	private JTable tblProbDist;
+	private JTabbedPane graphTabs;
+	
+	private int graphCtr = 1;
 
 	/**
 	 * View Constructor
@@ -103,8 +109,8 @@ public class View extends JFrame {
 		mntmSpecifications = new JMenuItem("Specifications");
 		mnProject.add(mntmSpecifications);
 		
-		mntmAbout = new JMenuItem("About");
-		mnProject.add(mntmAbout);
+		mntmHelp = new JMenuItem("Help");
+		mnProject.add(mntmHelp);
 
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -227,6 +233,12 @@ public class View extends JFrame {
 		graphPanel.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
 		graphPanel.setBorder(new TitledBorder(new LineBorder(null, 1, true), "Graph", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		graphPanel.setBounds(206, 0, 553, 339);
+		graphPanel.setLayout(null);
+		
+		// Display graph
+		graphTabs = new JTabbedPane(JTabbedPane.TOP);
+		graphTabs.setBounds(10, 21, 533, 307);
+		graphPanel.add(graphTabs);
 		
 		/*
 		 * ANSWER PANEL
@@ -251,6 +263,7 @@ public class View extends JFrame {
 		probDistPanel.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
 		probDistPanel.setBorder(new TitledBorder(new LineBorder(null, 1, true), "Probability Distribution Table", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		probDistPanel.setBounds(10, 340, 749, 138);
+		probDistPanel.setLayout(null);
 		
 		tblProbDist = new JTable();
 		tblProbDist.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
@@ -287,10 +300,8 @@ public class View extends JFrame {
 		// DELETE THIS AFTER
 		tab1.add(inputPanel);		
 		tab1.add(graphPanel);
-		graphPanel.setLayout(null);
 		tab1.add(answerPanel);
 		tab1.add(probDistPanel);
-		probDistPanel.setLayout(null);
 	}
 	
 	
@@ -318,8 +329,8 @@ public class View extends JFrame {
 	 * Adds an action listener to the ABOUT menu item
 	 * @param listener - Action listener for ABOUT menu item
 	 */
-	public void addMenuItemAboutListener(ActionListener listener) {
-		mntmAbout.addActionListener(listener);
+	public void addMenuItemHelpListener(ActionListener listener) {
+		mntmHelp.addActionListener(listener);
 	}
 	
 	/*
@@ -371,10 +382,16 @@ public class View extends JFrame {
 		lblProbability.setText(str);
 	}
 	
+	public void drawGraph(JFreeChart graph) {
+		graphTabs.addTab("Graph_"+graphCtr, null, new ChartPanel(graph), null);
+		graphTabs.setSelectedIndex(graphCtr-1);
+		graphCtr++;
+	}
+	
 	/*
 	 * GET INPUTS
 	 */
-	
+
 	/**
 	 * @return input value for N
 	 */
