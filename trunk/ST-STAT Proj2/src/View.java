@@ -7,11 +7,9 @@ import javax.swing.JTabbedPane;
 
 import java.awt.Font;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -19,15 +17,18 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
+import javax.swing.JMenuItem;
+import javax.swing.JTable;
 
-
+/**
+ * VIEW:
+ * Handles all GUI related code
+ */
 public class View extends JFrame {
-
 	private JPanel contentPane;
 	
 	private JMenuBar menuBar;
-	private JMenu mnProjSpecs;
-	private JMenu mnHelp;
+	private JMenu mnProject;
 	
 	private JTabbedPane tabbedPane;
 	private JPanel tab1;
@@ -36,7 +37,7 @@ public class View extends JFrame {
 	private JPanel tab4;
 	
 	private JPanel inputPanel;
-	private JPanel contentPanel;
+	private JPanel graphPanel;
 	private JPanel answerPanel;
 	private JPanel probDistPanel;
 	
@@ -59,25 +60,26 @@ public class View extends JFrame {
 	private JTextField txtX2;
 	
 	private JButton btnSolve;
-	
-	private JLabel lblF1;
-	private JLabel lblChangeX;
-	private JLabel lblChangeBigN;
-	private JLabel lblChangeSmallN;
-	private JLabel lblChangeK;
 	private JLabel lblProbability;
+	private JMenuItem mntmClearFields;
+	private JMenuItem mntmSpecifications;
+	private JMenuItem mntmAbout;
+	private JTable tblProbDist;
 	
 
 	/**
-	 * Create the frame.
+	 * View Constructor
 	 */
 	public View() {
 		initGUI();
 	}
 	
+	/**
+	 * View content
+	 */
 	private void initGUI() {
 		setResizable(false);
-		/**
+		/*
 		 * FRAME PROPERTIES
 		 */
 		setTitle("Hypergeometric Distribution");
@@ -86,24 +88,30 @@ public class View extends JFrame {
 		setLocationRelativeTo(null);
 		setVisible(true);
 		
-		/**
+		/*
 		 * MENU
 		 */
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
-		mnProjSpecs = new JMenu("Project Specifications");
-		menuBar.add(mnProjSpecs);
+		mnProject = new JMenu("Project");
+		menuBar.add(mnProject);
 		
-		mnHelp = new JMenu("Help");
-		menuBar.add(mnHelp);
+		mntmClearFields = new JMenuItem("Clear Fields");
+		mnProject.add(mntmClearFields);
+		
+		mntmSpecifications = new JMenuItem("Specifications");
+		mnProject.add(mntmSpecifications);
+		
+		mntmAbout = new JMenuItem("About");
+		mnProject.add(mntmAbout);
 
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
 		
-		/**
+		/*
 		 * INPUT PANEL
 		 */
 		inputPanel = new JPanel();
@@ -212,16 +220,15 @@ public class View extends JFrame {
 		btnSolve.setBounds(10, 174, 172, 35);
 		inputPanel.add(btnSolve);
 		
-		/**
-		 * CONTENT PANEL
+		/*
+		 * GRAPH PANEL
 		 */
-		contentPanel = new JPanel();
-		contentPanel.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
-		contentPanel.setBorder(new TitledBorder(new LineBorder(null, 1, true), "Content", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		contentPanel.setBounds(206, 0, 553, 339);
-		contentPanel.setLayout(null);
+		graphPanel = new JPanel();
+		graphPanel.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
+		graphPanel.setBorder(new TitledBorder(new LineBorder(null, 1, true), "Graph", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		graphPanel.setBounds(206, 0, 553, 339);
 		
-		/**
+		/*
 		 * ANSWER PANEL
 		 */
 		answerPanel = new JPanel();
@@ -230,137 +237,197 @@ public class View extends JFrame {
 		answerPanel.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
 		answerPanel.setBorder(new TitledBorder(new LineBorder(null, 1, true), "Answer", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
-		// h(x; N, n, k) =
-		lblF1 = new JLabel("h(");
-		lblF1.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
-		lblF1.setBounds(10, 11, 25, 27);
-		answerPanel.add(lblF1);
-		
-		lblChangeX = new JLabel("x;");
-		lblChangeX.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
-		lblChangeX.setBounds(28, 11, 25, 27);
-		answerPanel.add(lblChangeX);
-		
-		lblChangeBigN = new JLabel("N,");
-		lblChangeBigN.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
-		lblChangeBigN.setBounds(45, 11, 25, 27);
-		answerPanel.add(lblChangeBigN);
-		
-		lblChangeSmallN = new JLabel("n,");
-		lblChangeSmallN.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
-		lblChangeSmallN.setBounds(71, 11, 25, 27);
-		answerPanel.add(lblChangeSmallN);
-		
-		lblChangeK = new JLabel("k) =");
-		lblChangeK.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
-		lblChangeK.setBounds(90, 11, 60, 27);
-		answerPanel.add(lblChangeK);
-		
 		// Answer
-		lblProbability = new JLabel("probability");
+		lblProbability = new JLabel("ANSWER");
 		lblProbability.setHorizontalAlignment(SwingConstants.CENTER);
-		lblProbability.setFont(new Font("Segoe UI Symbol", Font.BOLD, 30));
-		lblProbability.setBounds(10, 43, 177, 65);
+		lblProbability.setFont(new Font("Segoe UI Symbol", Font.BOLD, 36));
+		lblProbability.setBounds(10, 11, 177, 97);
 		answerPanel.add(lblProbability);
 		
-		/**
+		/*
 		 * PROBABILITY DISTRIBUTION PANEL
 		 */
 		probDistPanel = new JPanel();
-		probDistPanel.setLayout(null);
 		probDistPanel.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
 		probDistPanel.setBorder(new TitledBorder(new LineBorder(null, 1, true), "Probability Distribution Table", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		probDistPanel.setBounds(10, 340, 749, 138);
 		
-		/**
+		tblProbDist = new JTable();
+		tblProbDist.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
+		tblProbDist.setBounds(10, 21, 729, 106);
+		probDistPanel.add(tblProbDist);
+		
+		/*
 		 * TABBED PANES
 		 */
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
-		contentPane.add(tabbedPane);
+		contentPane.add(tabbedPane);		
 		
-		/**
-		 * TAB 1: FIXED PARAMETERS
-		 */
+		// TAB 1: FIXED PARAMETERS
 		tab1 = new JPanel();
 		tab1.setLayout(null);
 		tabbedPane.addTab("Fixed Parameters", null, tab1, null);
-		tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 		
-		/**
-		 * TAB 2: RANGE OF 'x'
-		 */
+		// TAB 2: RANGE OF 'x'
 		tab2 = new JPanel();
 		tab2.setLayout(null);
 		tabbedPane.addTab("Range of 'x'", null, tab2, null);
-		tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
 		
-		/**
-		 * TAB 3: 'n' INCREASES
-		 */
+		// TAB 3: 'n' INCREASES
 		tab3 = new JPanel();
 		tab3.setLayout(null);
 		tabbedPane.addTab("'n' Increases", null, tab3, null);
-		tabbedPane.setMnemonicAt(2, KeyEvent.VK_3);
 		
-		/**
-		 * TAB 4: 'k' INCREASES
-		 */
+		// TAB 4: 'k' INCREASES
 		tab4 = new JPanel();
 		tab4.setLayout(null);
 		tabbedPane.addTab("'k' Increases", null, tab4, null);
-		tabbedPane.setMnemonicAt(3, KeyEvent.VK_4);
 		
+		// DELETE THIS AFTER
 		tab1.add(inputPanel);		
-		tab1.add(contentPanel);
+		tab1.add(graphPanel);
+		graphPanel.setLayout(null);
 		tab1.add(answerPanel);
 		tab1.add(probDistPanel);
+		probDistPanel.setLayout(null);
 	}
 	
-	/**
-	 * GET INPUTS
+	
+	/*
+	 * MENU ITEM AddListener METHODS
 	 */
-	public long getBigN() {
-		return Long.parseLong(txtBigN.getText());
-	}
-	
-	public long getSmallN1() {
-		return Long.parseLong(txtSmallN1.getText());
-	}
-	
-	public long getSmallN2() {
-		return Long.parseLong(txtSmallN2.getText());
-	}
-	
-	public long getK1() {
-		return Long.parseLong(txtK1.getText());
-	}
-	
-	public long getK2() {
-		return Long.parseLong(txtK2.getText());
-	}
-	
-	public long getX1() {
-		return Long.parseLong(txtX1.getText());
-	}
-	
-	public long getX2() {
-		return Long.parseLong(txtX2.getText());
+
+	/**
+	 * Adds an action listener to the CLEAR FIELDS menu item
+	 * @param listener - Action listener for CLEAR FIELDS menu item
+	 */
+	public void addMenuItemClearFieldsListener(ActionListener listener) {
+		mntmClearFields.addActionListener(listener);
 	}
 	
 	/**
+	 * Adds an action listener to the SPECIFICATIONS menu item
+	 * @param listener - Action listener for SPECIFICATIONS menu item
+	 */
+	public void addMenuItemSpecificationsListener(ActionListener listener) {
+		mntmSpecifications.addActionListener(listener);
+	}
+	
+	/**
+	 * Adds an action listener to the ABOUT menu item
+	 * @param listener - Action listener for ABOUT menu item
+	 */
+	public void addMenuItemAboutListener(ActionListener listener) {
+		mntmAbout.addActionListener(listener);
+	}
+	
+	/*
+	 * TAB SELECTION AddListener METHOD
+	 */
+	
+	/**
+	 * Adds a change listener to the TABBED PANE
+	 * @param listener - Change listener for the TABBED PANE
+	 */
+	public void addTabSelectionListener(ChangeListener listener) {
+		tabbedPane.addChangeListener(listener);
+	}
+	
+	/*
+	 * SOLVE BUTTON AddListener METHOD
+	 */
+	
+	/**
+	 * Removes the all the current action listeners first before adding an action listener to the SOLVE BUTTON
+	 * @param listener - Action listener for the SOLVE BUTTON
+	 */
+	public void addBtnSolveListener(ActionListener listener) {
+		ActionListener[] list = btnSolve.getActionListeners();
+		for(int i = 0; i < list.length; i++) {
+			btnSolve.removeActionListener(list[i]);
+		}
+		
+		btnSolve.addActionListener(listener);
+	}
+	
+	/*
 	 * DISPLAY RESULTs
 	 */
+	
+	/**
+	 * Sets the lblProbability to the computed probability
+	 * @param probability - value to be set in lblProbability
+	 */
 	public void setProbability(double probability) {		
-		double value = probability;
-		double rounded = (double) Math.round(value * 10000) / 10000;
-		System.out.println(value +" rounded is "+ rounded);
-		lblProbability.setText(Double.toString(rounded));
+		lblProbability.setText(Double.toString(probability));
 	}
 	
 	/**
-	 * GET COMPONENTS
+	 * Sets the lblProbability to message
+	 * @param str - message to be displayed
 	 */
+	public void setProbability(String str) {		
+		lblProbability.setText(str);
+	}
+	
+	/*
+	 * GET INPUTS
+	 */
+	
+	/**
+	 * @return input value for N
+	 */
+	public int getBigN() {
+		return Integer.parseInt(txtBigN.getText());
+	}
+	
+	/**
+	 * @return input value for lower bound n
+	 */
+	public int getSmallN1() {
+		return Integer.parseInt(txtSmallN1.getText());
+	}
+	
+	/**
+	 * @return input value for upper bound n
+	 */
+	public int getSmallN2() {
+		return Integer.parseInt(txtSmallN2.getText());
+	}
+	
+	/**
+	 * @return input value for lower bound k
+	 */
+	public int getK1() {
+		return Integer.parseInt(txtK1.getText());
+	}
+	
+	/**
+	 * @return input value for upper bound k
+	 */
+	public int getK2() {
+		return Integer.parseInt(txtK2.getText());
+	}
+	
+	/**
+	 * @return input value for lower bound x
+	 */
+	public int getX1() {
+		return Integer.parseInt(txtX1.getText());
+	}
+	
+	/**
+	 * @return input value for upper bound x
+	 */
+	public int getX2() {
+		return Integer.parseInt(txtX2.getText());
+	}
+	
+	/*
+	 * GET COMPONENTs
+	 */
+	
 	public JPanel getTab1() {
 		return tab1;
 	}
@@ -382,7 +449,7 @@ public class View extends JFrame {
 	}
 	
 	public JPanel getContentPanel() {
-		return contentPanel;
+		return graphPanel;
 	}
 	
 	public JPanel getAnswerPanel() {
@@ -393,14 +460,31 @@ public class View extends JFrame {
 		return probDistPanel;
 	}
 	
-	/**
-	 * LISTENERS
-	 */
-	public void addTabSelectionListener(ChangeListener tabSelectionListener) {
-		tabbedPane.addChangeListener(tabSelectionListener);
+	public JTextField getTxtBigN() {
+		return txtBigN;
 	}
 	
-	public void addBtnSolveListener(ActionListener btnSolveListener) {
-		btnSolve.addActionListener(btnSolveListener);
+	public JTextField getTxtSmallN1() {
+		return txtSmallN1;
+	}
+	
+	public JTextField getTxtSmallN2() {
+		return txtSmallN2;
+	}
+	
+	public JTextField getTxtK1() {
+		return txtK1;
+	}
+	
+	public JTextField getTxtK2() {
+		return txtK2;
+	}
+	
+	public JTextField getTxtX1() {
+		return txtX1;
+	}
+	
+	public JTextField getTxtX2() {
+		return txtX2;
 	}
 }
