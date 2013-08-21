@@ -6,6 +6,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JTabbedPane;
 
 import java.awt.Font;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.border.LineBorder;
@@ -48,15 +49,23 @@ public class View extends JFrame {
 	private JTextField txtSmallN2;
 	
 	private JLabel lblK;
-	private JLabel lblX;
 	private JTextField txtK1;
-	private JTextField txtX1;
-	
 	private JLabel lblTo2;
 	private JTextField txtK2;
+	
+	private JLabel lblX;
+	private JTextField txtX1;	
 	private JLabel lblTo3;
 	private JTextField txtX2;
+	
 	private JButton btnSolve;
+	
+	private JLabel lblF1;
+	private JLabel lblChangeX;
+	private JLabel lblChangeBigN;
+	private JLabel lblChangeSmallN;
+	private JLabel lblChangeK;
+	private JLabel lblProbability;
 	
 
 	/**
@@ -67,6 +76,7 @@ public class View extends JFrame {
 	}
 	
 	private void initGUI() {
+		setResizable(false);
 		/**
 		 * FRAME PROPERTIES
 		 */
@@ -220,6 +230,39 @@ public class View extends JFrame {
 		answerPanel.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
 		answerPanel.setBorder(new TitledBorder(new LineBorder(null, 1, true), "Answer", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
+		// h(x; N, n, k) =
+		lblF1 = new JLabel("h(");
+		lblF1.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
+		lblF1.setBounds(10, 11, 25, 27);
+		answerPanel.add(lblF1);
+		
+		lblChangeX = new JLabel("x;");
+		lblChangeX.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
+		lblChangeX.setBounds(28, 11, 25, 27);
+		answerPanel.add(lblChangeX);
+		
+		lblChangeBigN = new JLabel("N,");
+		lblChangeBigN.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
+		lblChangeBigN.setBounds(45, 11, 25, 27);
+		answerPanel.add(lblChangeBigN);
+		
+		lblChangeSmallN = new JLabel("n,");
+		lblChangeSmallN.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
+		lblChangeSmallN.setBounds(71, 11, 25, 27);
+		answerPanel.add(lblChangeSmallN);
+		
+		lblChangeK = new JLabel("k) =");
+		lblChangeK.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
+		lblChangeK.setBounds(90, 11, 60, 27);
+		answerPanel.add(lblChangeK);
+		
+		// Answer
+		lblProbability = new JLabel("probability");
+		lblProbability.setHorizontalAlignment(SwingConstants.CENTER);
+		lblProbability.setFont(new Font("Segoe UI Symbol", Font.BOLD, 30));
+		lblProbability.setBounds(10, 43, 177, 65);
+		answerPanel.add(lblProbability);
+		
 		/**
 		 * PROBABILITY DISTRIBUTION PANEL
 		 */
@@ -234,7 +277,6 @@ public class View extends JFrame {
 		 */
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
-		tabbedPane.addChangeListener(new tabSelectionListener());
 		contentPane.add(tabbedPane);
 		
 		/**
@@ -268,42 +310,97 @@ public class View extends JFrame {
 		tab4.setLayout(null);
 		tabbedPane.addTab("'k' Increases", null, tab4, null);
 		tabbedPane.setMnemonicAt(3, KeyEvent.VK_4);
+		
+		tab1.add(inputPanel);		
+		tab1.add(contentPanel);
+		tab1.add(answerPanel);
+		tab1.add(probDistPanel);
 	}
 	
 	/**
-	 * GETTERs and SETTERs
+	 * GET INPUTS
 	 */
+	public long getBigN() {
+		return Long.parseLong(txtBigN.getText());
+	}
 	
-	class tabSelectionListener implements ChangeListener {
-
-		@Override
-		public void stateChanged(ChangeEvent e) {
-			JTabbedPane pane = (JTabbedPane) e.getSource();
-	        int index = pane.getSelectedIndex();
-	        
-	        System.out.println("selectedIndex = " + index);
-	        
-	        if(index == 0) {
-	        	tab1.add(inputPanel);		
-	    		tab1.add(contentPanel);
-	    		tab1.add(answerPanel);
-	    		//tab1.add(probDistPanel);
-	        } else if(index == 1) {
-	        	tab2.add(inputPanel);		
-	    		tab2.add(contentPanel);
-	    		tab2.add(answerPanel);
-	    		tab2.add(probDistPanel);
-	        } else if(index == 2) {
-	        	tab3.add(inputPanel);		
-	    		tab3.add(contentPanel);
-	    		//tab3.add(answerPanel);
-	    		//tab3.add(probDistPanel);
-	        } else if(index == 3) {
-	        	tab4.add(inputPanel);		
-	    		tab4.add(contentPanel);
-	    		//tab4.add(answerPanel);
-	    		//tab4.add(probDistPanel);
-	        }
-		}
+	public long getSmallN1() {
+		return Long.parseLong(txtSmallN1.getText());
+	}
+	
+	public long getSmallN2() {
+		return Long.parseLong(txtSmallN2.getText());
+	}
+	
+	public long getK1() {
+		return Long.parseLong(txtK1.getText());
+	}
+	
+	public long getK2() {
+		return Long.parseLong(txtK2.getText());
+	}
+	
+	public long getX1() {
+		return Long.parseLong(txtX1.getText());
+	}
+	
+	public long getX2() {
+		return Long.parseLong(txtX2.getText());
+	}
+	
+	/**
+	 * DISPLAY RESULTs
+	 */
+	public void setProbability(double probability) {		
+		double value = probability;
+		double rounded = (double) Math.round(value * 10000) / 10000;
+		System.out.println(value +" rounded is "+ rounded);
+		lblProbability.setText(Double.toString(rounded));
+	}
+	
+	/**
+	 * GET COMPONENTS
+	 */
+	public JPanel getTab1() {
+		return tab1;
+	}
+	
+	public JPanel getTab2() {
+		return tab2;
+	}
+	
+	public JPanel getTab3() {
+		return tab3;
+	}
+	
+	public JPanel getTab4() {
+		return tab4;
+	}
+	
+	public JPanel getInputPanel() {
+		return inputPanel;
+	}
+	
+	public JPanel getContentPanel() {
+		return contentPanel;
+	}
+	
+	public JPanel getAnswerPanel() {
+		return answerPanel;
+	}
+	
+	public JPanel getProbDistPanel() {
+		return probDistPanel;
+	}
+	
+	/**
+	 * LISTENERS
+	 */
+	public void addTabSelectionListener(ChangeListener tabSelectionListener) {
+		tabbedPane.addChangeListener(tabSelectionListener);
+	}
+	
+	public void addBtnSolveListener(ActionListener btnSolveListener) {
+		btnSolve.addActionListener(btnSolveListener);
 	}
 }

@@ -2,7 +2,8 @@
 public class Driver {
 
 	public static void main(String[] args) {
-		new View();
+		View myView = new View();
+		Model myModel = new Model();
+		Controller myController = new Controller(myView, myModel);
 	}
-
 }
