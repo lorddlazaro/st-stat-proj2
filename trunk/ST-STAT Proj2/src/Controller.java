@@ -337,7 +337,7 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {			
 			if(isMainInputValid() && isInputX2Valid()) {				
 				myModel.solveHyperGeomRangeX();
-				myModel.readyGraph("Hypergeometric Distribution");
+				myModel.readyGraph("Range of Values for Random Variable 'x'");
 				myView.setProbability(myModel.roundOff(myModel.getProbability()));
 				myView.drawGraph(myModel.getGraph());
 			}
