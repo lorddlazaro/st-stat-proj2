@@ -1,3 +1,10 @@
+import java.util.ArrayList;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+
 import jstats.Statistic;
 
 /**
@@ -13,7 +20,10 @@ public class Model {
 	private int x1;
 	private int x2;
 	private double probability = 0;
-	
+	private ArrayList<Double> probList;
+	private JFreeChart graph;
+	private DefaultCategoryDataset dataset;
+
 	/**
 	 * Rounds of value to 4 decimal places
 	 * @param value - value to be rounded off
@@ -22,7 +32,7 @@ public class Model {
 	public double roundOff(double value) {
 		return (double) Math.round(value * 10000) / 10000;
 	}
-	
+
 	/**
 	 * Solves for the probability using Hypergeometric Distribution given N, n, k, and x
 	 */
@@ -30,21 +40,59 @@ public class Model {
 		probability = 0;
 		probability = Statistic.combination(k1, x1) * Statistic.combination(bigN-k1, smallN1-x1) / Statistic.combination(bigN, smallN1);
 	}
-	
+
 	/**
-	 * Solves for the probability using Hypergeometric Distribution given N, n, k, and a range of values for x
+	 * Solves for the probability using Hypergeometric Distribution given N, n, k, and a range of values for x.
 	 */
 	public void solveHyperGeomRangeX() {
 		probability = 0;
+		probList = new ArrayList<Double>();
+
 		for(int i = x1; i <= x2; i++) {
-			probability += Statistic.combination(k1, i) * Statistic.combination(bigN-k1, smallN1-i) / Statistic.combination(bigN, smallN1);
+			/*probability += Statistic.combination(k1, i) * Statistic.combination(bigN-k1, smallN1-i) / Statistic.combination(bigN, smallN1);
+			probList.add(roundOff(probability));*/
+
+			probList.add(roundOff(Statistic.combination(k1, i) * Statistic.combination(bigN-k1, smallN1-i) / Statistic.combination(bigN, smallN1)));
+		}
+
+		for (int i = 0; i < probList.size(); i++) {
+			probability += probList.get(i);
 		}
 	}
-	
+
+	/**
+	 * Builds the data set for the graph
+	 */
+	public void createDataSet() {
+		dataset = new DefaultCategoryDataset();
+		int j = 0;
+		for(int i = x1; i <= x2; i++) {
+			dataset.setValue(probList.get(j), Double.toString(probList.get(j)), Integer.toString(i));
+			j++;
+		}
+	}
+
+	/**
+	 * Creates the graph
+	 * @param graphTitle - the title for the graph
+	 */
+	public void createGraph(String graphTitle) {
+		graph = ChartFactory.createBarChart(graphTitle, "x", "Probability", dataset, PlotOrientation.VERTICAL, false, true, false);
+	}
+
+	/**
+	 * Builds the dataset and creates the graph
+	 * @param title - the title for the graph
+	 */
+	public void readyGraph(String title) {
+		createDataSet();
+		createGraph(title);
+	}
+
 	/*
 	 * GETTERs and SETTERs
 	 */
-	
+
 	public int getBigN() {
 		return bigN;
 	}
@@ -100,12 +148,16 @@ public class Model {
 	public void setX2(int x2) {
 		this.x2 = x2;
 	}
-	
+
 	public double getProbability() {
 		return probability;
 	}
 
 	public void setProbability(double probability) {
 		this.probability = probability;
+	}
+
+	public JFreeChart getGraph() {
+		return graph;
 	}
 }
