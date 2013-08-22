@@ -160,4 +160,8 @@ public class Model {
 	public JFreeChart getGraph() {
 		return graph;
 	}
+	
+	public ArrayList<Double> getProbList() {
+		return probList;
+	}
 }

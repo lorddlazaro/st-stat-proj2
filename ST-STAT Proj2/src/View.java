@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeListener;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JLabel;
@@ -265,11 +266,6 @@ public class View extends JFrame {
 		probDistPanel.setBounds(10, 340, 749, 138);
 		probDistPanel.setLayout(null);
 		
-		tblProbDist = new JTable();
-		tblProbDist.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
-		tblProbDist.setBounds(10, 21, 729, 106);
-		probDistPanel.add(tblProbDist);
-		
 		/*
 		 * TABBED PANES
 		 */
@@ -506,5 +502,16 @@ public class View extends JFrame {
 	
 	public JTextField getTxtX2() {
 		return txtX2;
+	}
+	
+	public JTable getTblProbDist() {
+		return tblProbDist;
+	}
+	
+	public void setTblProbDist(Object[][] probValue, String[] xValue) {
+		tblProbDist = new JTable(probValue, xValue);
+		tblProbDist.setBounds(10, 21, 729, 106);
+		probDistPanel.add(tblProbDist);
+		validate();
 	}
 }
