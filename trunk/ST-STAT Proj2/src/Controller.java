@@ -1,4 +1,11 @@
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JOptionPane;
+import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  * CONTROLLER:
@@ -306,7 +313,7 @@ public class Controller {
 	
 	public void populateTheProbDistTable() {
 		String[] xValues = new String[myModel.getProbList().size()];
-		Object[][] probValues = new Object[1][myModel.getProbList().size()];
+		Object[][] probValues = new Object[2][myModel.getProbList().size()];
 		int j = 0;
 		
 		for(int i = myModel.getX1(); i <= myModel.getX2(); i++) {
@@ -316,7 +323,9 @@ public class Controller {
 		}
 		
 		for(int i = 0; i < myModel.getProbList().size(); i++) {
-			probValues[0][i] = myModel.getProbList().get(i);
+			//probValues[0][i] = myModel.getProbList().get(i);
+			probValues[0][i] = xValues[i];
+			probValues[1][i] = myModel.getProbList().get(i);
 		}
 		
 		myView.setTblProbDist(probValues, xValues);

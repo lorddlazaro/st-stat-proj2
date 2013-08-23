@@ -266,6 +266,11 @@ public class View extends JFrame {
 		probDistPanel.setBounds(10, 340, 749, 138);
 		probDistPanel.setLayout(null);
 		
+		tblProbDist = new JTable();
+		tblProbDist.setRowSelectionAllowed(false);
+		tblProbDist.setBounds(10, 21, 729, 106);
+		probDistPanel.add(tblProbDist);
+		
 		/*
 		 * TABBED PANES
 		 */
@@ -387,6 +392,13 @@ public class View extends JFrame {
 		graphCtr++;
 	}
 	
+	public void setTblProbDist(Object[][] probValue, Object[] xValue) {
+		tblProbDist = new JTable(probValue, xValue);
+		tblProbDist.setBounds(10, 21, 729, 106);
+		probDistPanel.add(tblProbDist);
+		validate();
+	}
+	
 	/*
 	 * GET INPUTS
 	 */
@@ -506,12 +518,5 @@ public class View extends JFrame {
 	
 	public JTable getTblProbDist() {
 		return tblProbDist;
-	}
-	
-	public void setTblProbDist(Object[][] probValue, String[] xValue) {
-		tblProbDist = new JTable(probValue, xValue);
-		tblProbDist.setBounds(10, 21, 729, 106);
-		probDistPanel.add(tblProbDist);
-		validate();
 	}
 }
