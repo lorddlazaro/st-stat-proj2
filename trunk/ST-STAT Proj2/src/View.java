@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -23,6 +24,8 @@ import javax.swing.JTable;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+
+import javax.swing.JSlider;
 
 /**
  * VIEW:
@@ -51,28 +54,27 @@ public class View extends JFrame {
 	private JLabel lblBigN;
 	private JTextField txtBigN;
 	
-	private JLabel lblSmallN;
-	private JTextField txtSmallN1;
-	private JLabel lblTo1;
-	private JTextField txtSmallN2;
+	private JLabel lblSmallN1;
+	private JTextField txtSmallN;
 	
-	private JLabel lblK;
-	private JTextField txtK1;
-	private JLabel lblTo2;
-	private JTextField txtK2;
+	private JLabel lblK1;
+	private JTextField txtK;
 	
 	private JLabel lblX;
 	private JTextField txtX1;	
 	private JLabel lblTo3;
 	private JTextField txtX2;
 	
+	private JLabel lblK2;
+	private JLabel lblSmallN2;
+	private JSlider sldrSmallN;
+	private JSlider sldrK;
+	
 	private JButton btnSolve;
 	private JLabel lblProbability;
 	
 	private JTable tblProbDist;
-	private JTabbedPane graphTabs;
-	
-	private int graphCtr = 1;
+	private JPanel graphImgPanel;
 
 	/**
 	 * View Constructor
@@ -123,7 +125,7 @@ public class View extends JFrame {
 		 */
 		inputPanel = new JPanel();
 		inputPanel.setBorder(new TitledBorder(new LineBorder(null, 1, true), "Input", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		inputPanel.setBounds(10, 0, 197, 221);
+		inputPanel.setBounds(10, 0, 197, 300);
 		inputPanel.setLayout(null);
 		
 		// N: [input]
@@ -141,58 +143,32 @@ public class View extends JFrame {
 		txtBigN.setColumns(10);
 		
 		// n: [input n1] to [input n2]
-		lblSmallN = new JLabel("n:");
-		lblSmallN.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblSmallN.setBounds(10, 60, 25, 27);
-		lblSmallN.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
-		inputPanel.add(lblSmallN);
+		lblSmallN1 = new JLabel("n:");
+		lblSmallN1.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblSmallN1.setBounds(10, 60, 25, 27);
+		lblSmallN1.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
+		inputPanel.add(lblSmallN1);
 		
-		txtSmallN1 = new JTextField();
-		txtSmallN1.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
-		txtSmallN1.setHorizontalAlignment(SwingConstants.CENTER);
-		txtSmallN1.setBounds(39, 60, 60, 27);
-		txtSmallN1.setColumns(10);
-		inputPanel.add(txtSmallN1);
-		
-		lblTo1 = new JLabel("to");
-		lblTo1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTo1.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
-		lblTo1.setBounds(98, 60, 25, 27);
-		inputPanel.add(lblTo1);
-		
-		txtSmallN2 = new JTextField();
-		txtSmallN2.setHorizontalAlignment(SwingConstants.CENTER);
-		txtSmallN2.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
-		txtSmallN2.setColumns(10);
-		txtSmallN2.setBounds(122, 60, 60, 27);
-		inputPanel.add(txtSmallN2);
+		txtSmallN = new JTextField();
+		txtSmallN.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
+		txtSmallN.setHorizontalAlignment(SwingConstants.CENTER);
+		txtSmallN.setBounds(39, 60, 60, 27);
+		txtSmallN.setColumns(10);
+		inputPanel.add(txtSmallN);
 		
 		// k: [input k1] to [input k2]
-		lblK = new JLabel("k:");
-		lblK.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblK.setBounds(10, 98, 25, 27);
-		lblK.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
-		inputPanel.add(lblK);
+		lblK1 = new JLabel("k:");
+		lblK1.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblK1.setBounds(10, 98, 25, 27);
+		lblK1.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
+		inputPanel.add(lblK1);
 		
-		txtK1 = new JTextField();
-		txtK1.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
-		txtK1.setHorizontalAlignment(SwingConstants.CENTER);
-		txtK1.setColumns(10);
-		txtK1.setBounds(39, 98, 60, 27);
-		inputPanel.add(txtK1);
-		
-		lblTo2 = new JLabel("to");
-		lblTo2.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTo2.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
-		lblTo2.setBounds(98, 98, 25, 27);
-		inputPanel.add(lblTo2);
-		
-		txtK2 = new JTextField();
-		txtK2.setHorizontalAlignment(SwingConstants.CENTER);
-		txtK2.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
-		txtK2.setColumns(10);
-		txtK2.setBounds(122, 98, 60, 27);
-		inputPanel.add(txtK2);
+		txtK = new JTextField();
+		txtK.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
+		txtK.setHorizontalAlignment(SwingConstants.CENTER);
+		txtK.setColumns(10);
+		txtK.setBounds(39, 98, 60, 27);
+		inputPanel.add(txtK);
 		
 		// x: [input x1] to [input x2]
 		lblX = new JLabel("x:");
@@ -221,10 +197,45 @@ public class View extends JFrame {
 		txtX2.setBounds(122, 136, 60, 27);
 		inputPanel.add(txtX2);
 		
+		// slider for n
+		lblSmallN2 = new JLabel("n:");
+		lblSmallN2.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblSmallN2.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
+		lblSmallN2.setBounds(10, 169, 25, 27);
+		inputPanel.add(lblSmallN2);
+		
+		sldrSmallN = new JSlider();
+		sldrSmallN.setValue(0);
+		sldrSmallN.setMinimum(0);
+		sldrSmallN.setMaximum(0);
+		sldrSmallN.setMinorTickSpacing(1);
+		sldrSmallN.setSnapToTicks(true);
+		sldrSmallN.setPaintTicks(true);
+		sldrSmallN.setPaintLabels(true);
+		sldrSmallN.setBounds(39, 174, 148, 26);
+		inputPanel.add(sldrSmallN);
+		
+		lblK2 = new JLabel("k:");
+		lblK2.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblK2.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
+		lblK2.setBounds(10, 207, 25, 27);
+		inputPanel.add(lblK2);
+			
+		sldrK = new JSlider();
+		sldrK.setValue(0);
+		sldrK.setSnapToTicks(true);
+		sldrK.setPaintTicks(true);
+		sldrK.setPaintLabels(true);
+		sldrK.setMinorTickSpacing(1);
+		sldrK.setMinimum(0);
+		sldrK.setMaximum(0);
+		sldrK.setBounds(39, 208, 148, 26);
+		inputPanel.add(sldrK);
+		
 		// SOLVE Button
 		btnSolve = new JButton("Solve!");
 		btnSolve.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
-		btnSolve.setBounds(10, 174, 172, 35);
+		btnSolve.setBounds(10, 245, 177, 35);
 		inputPanel.add(btnSolve);
 		
 		/*
@@ -233,19 +244,19 @@ public class View extends JFrame {
 		graphPanel = new JPanel();
 		graphPanel.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
 		graphPanel.setBorder(new TitledBorder(new LineBorder(null, 1, true), "Graph", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		graphPanel.setBounds(206, 0, 553, 339);
+		graphPanel.setBounds(206, 0, 553, 400);
 		graphPanel.setLayout(null);
 		
 		// Display graph
-		graphTabs = new JTabbedPane(JTabbedPane.TOP);
-		graphTabs.setBounds(10, 21, 533, 307);
-		graphPanel.add(graphTabs);
+		graphImgPanel = new JPanel();
+		graphImgPanel.setBounds(10, 21, 533, 368);
+		graphPanel.add(graphImgPanel);
 		
 		/*
 		 * ANSWER PANEL
 		 */
 		answerPanel = new JPanel();
-		answerPanel.setBounds(10, 220, 197, 119);
+		answerPanel.setBounds(10, 301, 197, 99);
 		answerPanel.setLayout(null);
 		answerPanel.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
 		answerPanel.setBorder(new TitledBorder(new LineBorder(null, 1, true), "Answer", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -254,7 +265,7 @@ public class View extends JFrame {
 		lblProbability = new JLabel("ANSWER");
 		lblProbability.setHorizontalAlignment(SwingConstants.CENTER);
 		lblProbability.setFont(new Font("Segoe UI Symbol", Font.BOLD, 36));
-		lblProbability.setBounds(10, 11, 177, 97);
+		lblProbability.setBounds(10, 11, 177, 77);
 		answerPanel.add(lblProbability);
 		
 		/*
@@ -263,12 +274,12 @@ public class View extends JFrame {
 		probDistPanel = new JPanel();
 		probDistPanel.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
 		probDistPanel.setBorder(new TitledBorder(new LineBorder(null, 1, true), "Probability Distribution Table", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		probDistPanel.setBounds(10, 340, 749, 138);
+		probDistPanel.setBounds(10, 404, 749, 84);
 		probDistPanel.setLayout(null);
 		
 		tblProbDist = new JTable();
 		tblProbDist.setRowSelectionAllowed(false);
-		tblProbDist.setBounds(10, 21, 729, 106);
+		tblProbDist.setBounds(10, 21, 729, 52);
 		probDistPanel.add(tblProbDist);
 		
 		/*
@@ -363,6 +374,16 @@ public class View extends JFrame {
 	}
 	
 	/*
+	 * SLIDER AddListener Method
+	 */
+	
+	public void addSldrNListener(ChangeListener listener, int min, int max) {
+		sldrSmallN.addChangeListener(listener);
+		sldrSmallN.setMinimum(min);
+		sldrSmallN.setMaximum(max);
+	}
+	
+	/*
 	 * DISPLAY RESULTs
 	 */
 	
@@ -386,15 +407,19 @@ public class View extends JFrame {
 	 * Draws the graph to the UI
 	 * @param graph - graph to be drawn
 	 */
-	public void drawGraph(JFreeChart graph) {
-		graphTabs.addTab("Graph_"+graphCtr, null, new ChartPanel(graph), null);
-		graphTabs.setSelectedIndex(graphCtr-1);
-		graphCtr++;
+	public void drawGraph(ChartPanel graph) {
+		graphPanel.removeAll();
+		//graphImgPanel = new ChartPanel(graph);
+		//graphImgPanel.setBounds(10, 21, 533, 368);
+		graph.setBounds(10, 21, 533, 368);
+		graphPanel.add(graph);
+		graphPanel.validate();
 	}
 	
 	public void setTblProbDist(Object[][] probValue, Object[] xValue) {
 		tblProbDist = new JTable(probValue, xValue);
-		tblProbDist.setBounds(10, 21, 729, 106);
+		tblProbDist.setBounds(10, 21, 729, 52);
+		tblProbDist.setRowSelectionAllowed(false);
 		probDistPanel.add(tblProbDist);
 		validate();
 	}
@@ -414,28 +439,14 @@ public class View extends JFrame {
 	 * @return input value for lower bound n
 	 */
 	public int getSmallN1() {
-		return Integer.parseInt(txtSmallN1.getText());
-	}
-	
-	/**
-	 * @return input value for upper bound n
-	 */
-	public int getSmallN2() {
-		return Integer.parseInt(txtSmallN2.getText());
+		return Integer.parseInt(txtSmallN.getText());
 	}
 	
 	/**
 	 * @return input value for lower bound k
 	 */
 	public int getK1() {
-		return Integer.parseInt(txtK1.getText());
-	}
-	
-	/**
-	 * @return input value for upper bound k
-	 */
-	public int getK2() {
-		return Integer.parseInt(txtK2.getText());
+		return Integer.parseInt(txtK.getText());
 	}
 	
 	/**
@@ -492,20 +503,12 @@ public class View extends JFrame {
 		return txtBigN;
 	}
 	
-	public JTextField getTxtSmallN1() {
-		return txtSmallN1;
+	public JTextField getTxtSmallN() {
+		return txtSmallN;
 	}
 	
-	public JTextField getTxtSmallN2() {
-		return txtSmallN2;
-	}
-	
-	public JTextField getTxtK1() {
-		return txtK1;
-	}
-	
-	public JTextField getTxtK2() {
-		return txtK2;
+	public JTextField getTxtK() {
+		return txtK;
 	}
 	
 	public JTextField getTxtX1() {
@@ -518,5 +521,13 @@ public class View extends JFrame {
 	
 	public JTable getTblProbDist() {
 		return tblProbDist;
+	}
+	
+	public JSlider getSldrSmallN() {
+		return sldrSmallN;
+	}
+	
+	public JSlider getSldrK() {
+		return sldrK;
 	}
 }

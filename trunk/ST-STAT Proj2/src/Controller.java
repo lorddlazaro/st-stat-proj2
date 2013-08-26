@@ -15,6 +15,8 @@ public class Controller {
 	private View myView;
 	private Model myModel;
 	
+	private int tabIndex = 0;
+	
 	/**
 	 * Controller Constructor
 	 * @param view - GUI
@@ -45,17 +47,11 @@ public class Controller {
 			myView.getTxtBigN().setText(null);
 			myView.getTxtBigN().setBackground(Color.WHITE);
 			
-			myView.getTxtSmallN1().setText(null);
-			myView.getTxtSmallN1().setBackground(Color.WHITE);
+			myView.getTxtSmallN().setText(null);
+			myView.getTxtSmallN().setBackground(Color.WHITE);
 			
-			myView.getTxtSmallN2().setText(null);
-			myView.getTxtSmallN2().setBackground(Color.WHITE);
-			
-			myView.getTxtK1().setText(null);
-			myView.getTxtK1().setBackground(Color.WHITE);
-			
-        	myView.getTxtK2().setText(null);
-        	myView.getTxtK2().setBackground(Color.WHITE);
+			myView.getTxtK().setText(null);
+			myView.getTxtK().setBackground(Color.WHITE);
         	
         	myView.getTxtX1().setText(null);
         	myView.getTxtX1().setBackground(Color.WHITE);
@@ -107,20 +103,22 @@ public class Controller {
 		@Override
 		public void stateChanged(ChangeEvent e) {
 			JTabbedPane pane = (JTabbedPane) e.getSource();
-	        int index = pane.getSelectedIndex();
+	        tabIndex = pane.getSelectedIndex();
 	        
-	        System.out.println("selectedIndex = " + index);
+	        System.out.println("selectedIndex = " + tabIndex);
 	        
-	        switch(index) {
+	        switch(tabIndex) {
 	        case 0: // FIXED PARAMETERS
 	        	myView.getTab1().add(myView.getInputPanel());
 	        	myView.getTab1().add(myView.getContentPanel());
 	        	myView.getTab1().add(myView.getAnswerPanel());
 	        	myView.getTab1().add(myView.getProbDistPanel());
-	        	
-	        	myView.getTxtSmallN2().setEditable(false);
-	        	myView.getTxtK2().setEditable(false);
+	
+	        	myView.getTxtSmallN().setEditable(true);
+	        	myView.getTxtK().setEditable(true);
 	        	myView.getTxtX2().setEditable(false);
+	        	myView.getSldrSmallN().setEnabled(false);
+	        	myView.getSldrK().setEnabled(false);
 	        	
 	        	myView.addBtnSolveListener(new SolveTab1Listener());
 	        	break;
@@ -130,9 +128,11 @@ public class Controller {
 	        	myView.getTab2().add(myView.getAnswerPanel());
 	        	myView.getTab2().add(myView.getProbDistPanel());
 	        	
-	        	myView.getTxtSmallN2().setEditable(false);
-	        	myView.getTxtK2().setEditable(false);
+	        	myView.getTxtSmallN().setEditable(true);
+	        	myView.getTxtK().setEditable(true);
 	        	myView.getTxtX2().setEditable(true);
+	        	myView.getSldrSmallN().setEnabled(false);
+	        	myView.getSldrK().setEnabled(false);
 	        	
 	        	myView.addBtnSolveListener(new SolveTab2Listener());
 	        	break;
@@ -142,9 +142,11 @@ public class Controller {
 	        	myView.getTab3().add(myView.getAnswerPanel());
 	        	myView.getTab3().add(myView.getProbDistPanel());
 	        	
-	        	myView.getTxtSmallN2().setEditable(true);
-	        	myView.getTxtK2().setEditable(false);
-	        	myView.getTxtX2().setEditable(false);
+	        	myView.getTxtSmallN().setEditable(false);
+	        	myView.getTxtK().setEditable(true);
+	        	myView.getTxtX2().setEditable(true);
+	        	myView.getSldrSmallN().setEnabled(true);
+	        	myView.getSldrK().setEnabled(false);
 	        	
 	        	myView.addBtnSolveListener(new SolveTab3Listener());
 	        	break;
@@ -154,9 +156,11 @@ public class Controller {
 	        	myView.getTab4().add(myView.getAnswerPanel());
 	        	myView.getTab4().add(myView.getProbDistPanel());
 	        	
-	        	myView.getTxtSmallN2().setEditable(false);
-	        	myView.getTxtK2().setEditable(true);
-	        	myView.getTxtX2().setEditable(false);
+	        	myView.getTxtSmallN().setEditable(true);
+	        	myView.getTxtK().setEditable(false);
+	        	myView.getTxtX2().setEditable(true);
+	        	myView.getSldrSmallN().setEnabled(false);
+	        	myView.getSldrK().setEnabled(true);
 	        	
 	        	myView.addBtnSolveListener(new SolveTab4Listener());
 	        	break;
@@ -185,20 +189,20 @@ public class Controller {
 		}
 		
 		try {
-			myView.getTxtSmallN1().setBackground(Color.WHITE);
+			myView.getTxtSmallN().setBackground(Color.WHITE);
 			myModel.setSmallN1(myView.getSmallN1());
 			valid = true;
 		} catch (Exception ex) {
-			myView.getTxtSmallN1().setBackground(Color.PINK);
+			myView.getTxtSmallN().setBackground(Color.PINK);
 			valid = false;
 		}
 		
 		try {
-			myView.getTxtK1().setBackground(Color.WHITE);
+			myView.getTxtK().setBackground(Color.WHITE);
 			myModel.setK1(myView.getK1());
 			valid = true;
 		} catch (Exception ex) {
-			myView.getTxtK1().setBackground(Color.PINK);
+			myView.getTxtK().setBackground(Color.PINK);
 			valid = false;
 		}
 		
@@ -212,66 +216,21 @@ public class Controller {
 		}
 		
 		if (valid) {
-			if (myModel.getX1() <= myModel.getSmallN1() && myModel.getX1() <= myModel.getK1()) {
+			String str = "";
+			
+			if (!(myModel.getX1() <= myModel.getSmallN1()))
+				str = str.concat("x <= n");
+			
+			if (!(myModel.getX1() <= myModel.getK1()))
+				str = str.concat("\nx <= k");
+			
+			if (!(myModel.getK1() + myModel.getSmallN1() <= myModel.getBigN()))
+				str = str.concat("\nn + k <= N");
+			
+			if (str.isEmpty()) {
 				valid = true;
 			} else {
-				JOptionPane.showMessageDialog(myView, "x <= n ; x <= k", "Error!", JOptionPane.ERROR_MESSAGE);
-				valid = false;
-			}
-		}
-		
-		return valid;
-	}
-	
-	/**
-	 * Checks if input for the upper bound of n is valid
-	 * @return true if field for upper bound of n is not empty and lower bound n <= upper bound n
-	 */
-	private boolean isInputN2Valid() {
-		boolean valid = false;
-		
-		try {
-			myView.getTxtSmallN2().setBackground(Color.WHITE);
-			myModel.setSmallN2(myView.getSmallN2());
-			valid = true;
-		} catch (Exception ex) {
-			myView.getTxtSmallN2().setBackground(Color.PINK);
-			valid = false;
-		}
-		
-		if (valid) {
-			if(myModel.getSmallN1() <= myModel.getSmallN2()) {
-				valid = true;
-			} else {
-				JOptionPane.showMessageDialog(myView, "n1 <= n2", "Error!", JOptionPane.ERROR_MESSAGE);
-				valid = false;
-			}
-		}
-		
-		return valid;
-	}
-	
-	/**
-	 * Checks if input for the upper bound of k is valid
-	 * @return true if field for upper bound of k is not empty and lower bound k <= upper bound k
-	 */
-	private boolean isInputK2Valid() {
-		boolean valid = false;
-		
-		try {
-			myView.getTxtK2().setBackground(Color.WHITE);
-			myModel.setK2(myView.getK2());
-			valid = true;
-		} catch (Exception ex) {
-			myView.getTxtK2().setBackground(Color.PINK);
-			valid = false;
-		}
-		
-		if (valid) {		
-			if(myModel.getK1() <= myModel.getK2()) {
-				valid = true;
-			} else {
-				JOptionPane.showMessageDialog(myView, "k1 <= k2", "Error!", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(myView, str, "Error!", JOptionPane.ERROR_MESSAGE);
 				valid = false;
 			}
 		}
@@ -296,14 +255,71 @@ public class Controller {
 		}
 		
 		if (valid) {
-			if(myModel.getX1() <= myModel.getX2()) {
+			String str = "";
+			
+			if (!(myModel.getX1() <= myModel.getX2()))
+				str = str.concat("x1 <= x2");
+
+			if (!(myModel.getX2() <= myModel.getK1()))
+				str = str.concat("\nx2 <= k");
+			
+			if (!(myModel.getX2() <= myModel.getSmallN1()))
+					str = str.concat("\nx2 <= n");
+			
+			if(str.isEmpty()) {
 				valid = true;
 			} else {
-				JOptionPane.showMessageDialog(myView, "x1 <= x2", "Error!", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(myView, str, "Error!", JOptionPane.ERROR_MESSAGE);
 				valid = false;
 			}
 		}
 		
+		return valid;
+	}
+
+	private boolean isRangeNInputValid() {
+		boolean valid = false;
+		
+		try {
+			myView.getTxtBigN().setBackground(Color.WHITE);
+			myModel.setBigN(myView.getBigN());
+			valid = true;
+		} catch (Exception ex) {
+			myView.getTxtBigN().setBackground(Color.PINK);
+			valid = false;
+		}
+		
+		try {
+			myView.getTxtK().setBackground(Color.WHITE);
+			myModel.setK1(myView.getK1());
+			valid = true;
+		} catch (Exception ex) {
+			myView.getTxtK().setBackground(Color.PINK);
+			valid = false;
+		}
+		
+		try {
+			myView.getTxtX1().setBackground(Color.WHITE);
+			myModel.setX1(myView.getX1());
+			valid = true;
+		} catch (Exception ex) {
+			myView.getTxtX1().setBackground(Color.PINK);
+			valid = false;
+		}
+		
+		if (valid) {
+			String str = "";
+			
+			if (!(myModel.getX1() <= myModel.getK1()))
+				str = str.concat("\nx <= k");
+			
+			if (str.isEmpty()) {
+				valid = true;
+			} else {
+				JOptionPane.showMessageDialog(myView, str, "Error!", JOptionPane.ERROR_MESSAGE);
+				valid = false;
+			}
+		}
 		return valid;
 	}
 	
@@ -323,12 +339,30 @@ public class Controller {
 		}
 		
 		for(int i = 0; i < myModel.getProbList().size(); i++) {
-			//probValues[0][i] = myModel.getProbList().get(i);
 			probValues[0][i] = xValues[i];
 			probValues[1][i] = myModel.getProbList().get(i);
 		}
 		
 		myView.setTblProbDist(probValues, xValues);
+	}
+	
+	/*
+	 * SLIDER LISTENER
+	 */
+	class SliderNListener implements ChangeListener {
+
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			myView.getTxtSmallN().setText(Integer.toString(myView.getSldrSmallN().getValue()));
+			myModel.setSmallN1(myView.getSldrSmallN().getValue());
+			myModel.solveHyperGeomRangeX();
+			myModel.readyGraph("Range of Values for Random Variable 'x'");
+			myView.setProbability(myModel.roundOff(myModel.getProbability()));
+			myView.drawGraph(myModel.getGraph());
+			
+			populateTheProbDistTable();
+		}
+		
 	}
 	
 	/*
@@ -343,7 +377,6 @@ public class Controller {
 		@Override
 		public void actionPerformed(ActionEvent e) {	
 			if(isMainInputValid()) {
-				System.out.println(isMainInputValid());
 				myModel.solveHyperGeomDist();
 				myView.setProbability(myModel.roundOff(myModel.getProbability()));
 			}
@@ -378,10 +411,12 @@ public class Controller {
 	class SolveTab3Listener implements ActionListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e) {			
-			if(isMainInputValid() && isInputN2Valid()) {				
-				//myModel.solveHyperGeomRangeX();
-				myView.setProbability("N/A");
+		public void actionPerformed(ActionEvent e) {
+			myView.getTxtSmallN().setText(Integer.toString(myView.getX2()));
+			myModel.setSmallN1(myView.getSmallN1());
+			
+			if(isRangeNInputValid() && isInputX2Valid()) {
+				myView.addSldrNListener(new SliderNListener(), myModel.getX2(), myModel.getBigN()-myModel.getK1());
 			}
 			
 			System.out.println("Solve: Tab 3");
@@ -395,7 +430,7 @@ public class Controller {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {			
-			if(isMainInputValid() && isInputK2Valid()) {				
+			if(isMainInputValid()) {				
 				//myModel.solveHyperGeomRangeX();
 				myView.setProbability("N/A");
 			}

@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -13,10 +14,8 @@ import jstats.Statistic;
  */
 public class Model {
 	private int bigN;
-	private int smallN1;
-	private int smallN2;
-	private int k1;
-	private int k2;
+	private int smallN;
+	private int k;
 	private int x1;
 	private int x2;
 	private double probability = 0;
@@ -38,7 +37,7 @@ public class Model {
 	 */
 	public void solveHyperGeomDist() {
 		probability = 0;
-		probability = Statistic.combination(k1, x1) * Statistic.combination(bigN-k1, smallN1-x1) / Statistic.combination(bigN, smallN1);
+		probability = Statistic.combination(k, x1) * Statistic.combination(bigN-k, smallN-x1) / Statistic.combination(bigN, smallN);
 	}
 
 	/**
@@ -52,7 +51,7 @@ public class Model {
 			/*probability += Statistic.combination(k1, i) * Statistic.combination(bigN-k1, smallN1-i) / Statistic.combination(bigN, smallN1);
 			probList.add(roundOff(probability));*/
 
-			probList.add(roundOff(Statistic.combination(k1, i) * Statistic.combination(bigN-k1, smallN1-i) / Statistic.combination(bigN, smallN1)));
+			probList.add(roundOff(Statistic.combination(k, i) * Statistic.combination(bigN-k, smallN-i) / Statistic.combination(bigN, smallN)));
 		}
 
 		for (int i = 0; i < probList.size(); i++) {
@@ -67,7 +66,8 @@ public class Model {
 		dataset = new DefaultCategoryDataset();
 		int j = 0;
 		for(int i = x1; i <= x2; i++) {
-			dataset.setValue(probList.get(j), Double.toString(probList.get(j)), Integer.toString(i));
+			//dataset.setValue(probList.get(j), Double.toString(probList.get(j)), Integer.toString(i));
+			dataset.setValue(probList.get(j), "Probability", Integer.toString(i));
 			j++;
 		}
 	}
@@ -102,35 +102,19 @@ public class Model {
 	}
 
 	public int getSmallN1() {
-		return smallN1;
+		return smallN;
 	}
 
 	public void setSmallN1(int smallN1) {
-		this.smallN1 = smallN1;
-	}
-
-	public int getSmallN2() {
-		return smallN2;
-	}
-
-	public void setSmallN2(int smallN2) {
-		this.smallN2 = smallN2;
+		this.smallN = smallN1;
 	}
 
 	public int getK1() {
-		return k1;
+		return k;
 	}
 
 	public void setK1(int k1) {
-		this.k1 = k1;
-	}
-
-	public int getK2() {
-		return k2;
-	}
-
-	public void setK2(int k2) {
-		this.k2 = k2;
+		this.k = k1;
 	}
 
 	public int getX1() {
@@ -157,8 +141,12 @@ public class Model {
 		this.probability = probability;
 	}
 
-	public JFreeChart getGraph() {
+	/*public JFreeChart getGraph() {
 		return graph;
+	}*/
+	
+	public ChartPanel getGraph() {
+		return new ChartPanel(graph);
 	}
 	
 	public ArrayList<Double> getProbList() {
