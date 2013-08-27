@@ -1,5 +1,4 @@
 import java.awt.BorderLayout;
-import java.awt.Color;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -12,7 +11,6 @@ import java.awt.event.ActionListener;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeListener;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JLabel;
@@ -23,7 +21,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JTable;
 
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
 
 import javax.swing.JSlider;
 
@@ -409,11 +406,10 @@ public class View extends JFrame {
 	 */
 	public void drawGraph(ChartPanel graph) {
 		graphPanel.removeAll();
-		//graphImgPanel = new ChartPanel(graph);
-		//graphImgPanel.setBounds(10, 21, 533, 368);
 		graph.setBounds(10, 21, 533, 368);
 		graphPanel.add(graph);
 		graphPanel.validate();
+		validate();
 	}
 	
 	public void setTblProbDist(Object[][] probValue, Object[] xValue) {
