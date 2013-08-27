@@ -121,6 +121,7 @@ public class Controller {
 	        	myView.getSldrK().setEnabled(false);
 	        	
 	        	myView.addBtnSolveListener(new SolveTab1Listener());
+	        	myView.validate();
 	        	break;
 	        case 1: // RANGE OF 'x'
 	        	myView.getTab2().add(myView.getInputPanel());
@@ -135,6 +136,7 @@ public class Controller {
 	        	myView.getSldrK().setEnabled(false);
 	        	
 	        	myView.addBtnSolveListener(new SolveTab2Listener());
+	        	myView.validate();
 	        	break;
 	        case 2: // 'n' INCREASES
 	        	myView.getTab3().add(myView.getInputPanel());
@@ -149,6 +151,7 @@ public class Controller {
 	        	myView.getSldrK().setEnabled(false);
 	        	
 	        	myView.addBtnSolveListener(new SolveTab3Listener());
+	        	myView.validate();
 	        	break;
 	        case 3: // 'k' INCREASES
 	        	myView.getTab4().add(myView.getInputPanel());
@@ -163,6 +166,7 @@ public class Controller {
 	        	myView.getSldrK().setEnabled(true);
 	        	
 	        	myView.addBtnSolveListener(new SolveTab4Listener());
+	        	myView.validate();
 	        	break;
 	        }
 		}
@@ -323,6 +327,52 @@ public class Controller {
 		return valid;
 	}
 	
+	private boolean isRangeKInputValid() { // PLEASE CHECK, DI KO KASI ALAM YUNG CONDITION FOR THE VALIDITY OF THE RANGE OF 'k'
+		boolean valid = false;
+		
+		try {
+			myView.getTxtBigN().setBackground(Color.WHITE);
+			myModel.setBigN(myView.getBigN());
+			valid = true;
+		} catch (Exception ex) {
+			myView.getTxtBigN().setBackground(Color.PINK);
+			valid = false;
+		}
+		
+		try {
+			myView.getTxtK().setBackground(Color.WHITE);
+			myModel.setK1(myView.getK1());
+			valid = true;
+		} catch (Exception ex) {
+			myView.getTxtK().setBackground(Color.PINK);
+			valid = false;
+		}
+		
+		try {
+			myView.getTxtX1().setBackground(Color.WHITE);
+			myModel.setX1(myView.getX1());
+			valid = true;
+		} catch (Exception ex) {
+			myView.getTxtX1().setBackground(Color.PINK);
+			valid = false;
+		}
+		
+		if (valid) {
+			String str = "";
+			
+			if (!(myModel.getX1() <= myModel.getK1()))
+				str = str.concat("\nx <= k");
+			
+			if (str.isEmpty()) {
+				valid = true;
+			} else {
+				JOptionPane.showMessageDialog(myView, str, "Error!", JOptionPane.ERROR_MESSAGE);
+				valid = false;
+			}
+		}
+		return valid;
+	}
+	
 	/*
 	 * THIS IS THE PART WHERE THE TABLE GETS POPULATED BY THE VALUES FROM THE RANDOM VARIABLE X.
 	 */
@@ -361,6 +411,24 @@ public class Controller {
 			myView.drawGraph(myModel.getGraph());
 			
 			populateTheProbDistTable();
+			myView.validate();
+		}
+		
+	}
+	
+	class SliderKListener implements ChangeListener {
+
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			myView.getTxtK().setText(Integer.toString(myView.getSldrK().getValue()));
+			myModel.setSmallN1(myView.getSldrSmallN().getValue());
+			myModel.solveHyperGeomRangeX();
+			myModel.readyGraph("Range of Values for Random Variable 'x'");
+			myView.setProbability(myModel.roundOff(myModel.getProbability()));
+			myView.drawGraph(myModel.getGraph());
+			
+			populateTheProbDistTable();
+			myView.validate();
 		}
 		
 	}
@@ -430,9 +498,13 @@ public class Controller {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {			
-			if(isMainInputValid()) {				
-				//myModel.solveHyperGeomRangeX();
-				myView.setProbability("N/A");
+			if(isMainInputValid()) {
+				myView.getTxtK().setText(Integer.toString(myView.getX2()));
+				myModel.setK1(myView.getK1());
+
+				if(isRangeKInputValid() && isInputX2Valid()) {
+					myView.addSldrKListener(new SliderKListener(), myModel.getX2(), myModel.getBigN()-myModel.getK1());
+				}
 			}
 			
 			System.out.println("Solve: Tab 4");

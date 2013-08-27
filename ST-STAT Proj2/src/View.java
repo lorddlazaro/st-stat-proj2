@@ -380,6 +380,12 @@ public class View extends JFrame {
 		sldrSmallN.setMaximum(max);
 	}
 	
+	public void addSldrKListener(ChangeListener listener, int min, int max) {
+		sldrK.addChangeListener(listener);
+		sldrK.setMinimum(min);
+		sldrK.setMaximum(max);
+	}
+	
 	/*
 	 * DISPLAY RESULTs
 	 */
