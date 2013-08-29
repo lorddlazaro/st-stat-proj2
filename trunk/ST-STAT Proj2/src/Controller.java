@@ -323,6 +323,7 @@ public class Controller {
 		try {
 			myView.getTxtX1().setBackground(Color.WHITE);
 			myModel.setX1(1);
+			myView.getTxtX1().setText(Integer.toString(myModel.getX1()));
 			valid = true;
 		} catch (Exception ex) {
 			myView.getTxtX1().setBackground(Color.PINK);
@@ -332,11 +333,15 @@ public class Controller {
 		try {
 			myView.getTxtX2().setBackground(Color.WHITE);
 			myModel.setX2(myModel.getK1());
+			myView.getTxtX2().setText(Integer.toString(myModel.getX2()));
 			valid = true;
 		} catch (Exception ex) {
 			myView.getTxtX1().setBackground(Color.PINK);
 			valid = false;
 		}
+		
+		myModel.setSmallN1(myModel.getX2());
+		myView.getTxtSmallN().setText(Integer.toString(myModel.getSmallN1()));
 		
 		if (valid) {
 			String str = "";
@@ -351,6 +356,7 @@ public class Controller {
 				valid = false;
 			}
 		}
+		
 		return valid;
 	}
 	
@@ -379,11 +385,25 @@ public class Controller {
 		try {
 			myView.getTxtX1().setBackground(Color.WHITE);
 			myModel.setX1(1);
+			myView.getTxtX1().setText(Integer.toString(myModel.getX1()));
 			valid = true;
 		} catch (Exception ex) {
 			myView.getTxtX1().setBackground(Color.PINK);
 			valid = false;
 		}
+		
+		try {
+			myView.getTxtX2().setBackground(Color.WHITE);
+			myModel.setX2(myModel.getSmallN1());
+			myView.getTxtX2().setText(Integer.toString(myModel.getX2()));
+			valid = true;
+		} catch (Exception ex) {
+			myView.getTxtX1().setBackground(Color.PINK);
+			valid = false;
+		}
+		
+		myModel.setK1(myModel.getX2());
+		myView.getTxtK().setText(Integer.toString(myModel.getK1()));
 		
 		if (valid) {
 			String str = "";
@@ -398,6 +418,7 @@ public class Controller {
 				valid = false;
 			}
 		}
+		
 		return valid;
 	}
 	
@@ -433,6 +454,7 @@ public class Controller {
 		public void stateChanged(ChangeEvent e) {
 			myView.getTxtSmallN().setText(Integer.toString(myView.getSldrSmallN().getValue()));
 			myModel.setSmallN1(myView.getSldrSmallN().getValue());
+			
 			myModel.solveHyperGeomRangeX();
 			myModel.readyGraph("Range of Values for Random Variable 'x'");
 			myView.setProbability(myModel.roundOff(myModel.getProbability()));
@@ -448,9 +470,9 @@ public class Controller {
 
 		@Override
 		public void stateChanged(ChangeEvent e) {
-			myView.getTxtX2().setText(Integer.toString(myView.getSldrK().getValue()));
 			myView.getTxtK().setText(Integer.toString(myView.getSldrK().getValue()));
 			myModel.setK1(myView.getSldrK().getValue());
+			
 			myModel.solveHyperGeomRangeX();
 			myModel.readyGraph("Range of Values for Random Variable 'x'");
 			myView.setProbability(myModel.roundOff(myModel.getProbability()));
@@ -508,13 +530,8 @@ public class Controller {
 	class SolveTab3Listener implements ActionListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			myView.getTxtSmallN().setText(Integer.toString(myModel.getX2()));
-			myView.getTxtX1().setText(Integer.toString(myModel.getX1()));
-			myView.getTxtX2().setText(Integer.toString(myModel.getX2()));
-			myModel.setSmallN1(myModel.getX2());
-			
-			if(isRangeNInputValid()) {
+		public void actionPerformed(ActionEvent e) {			
+			if(isRangeNInputValid()) {			
 				myView.addSldrNListener(new SliderNListener(), myModel.getK1(), myModel.getBigN());
 			}
 			
@@ -529,12 +546,8 @@ public class Controller {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			myModel.setK1(myModel.getX1());
-			myView.getTxtK().setText(Integer.toString(myModel.getK1()));
-			myView.getTxtX1().setText(Integer.toString(myModel.getX1()));
-			
-			if(isRangeKInputValid()) {
-				myView.addSldrKListener(new SliderKListener(), myModel.getX1(), myModel.getBigN());
+			if(isRangeKInputValid()) {				
+				myView.addSldrKListener(new SliderKListener(), myModel.getX2(), myModel.getBigN());
 			}
 			
 			System.out.println("Solve: Tab 4");

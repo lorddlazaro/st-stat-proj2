@@ -48,11 +48,7 @@ public class Model {
 		probList = new ArrayList<Double>();
 
 		for(int i = x1; i <= x2; i++) {
-			try {
-				probList.add(roundOff(Statistic.combination(k, i) * Statistic.combination(bigN-k, smallN-i) / Statistic.combination(bigN, smallN)));
-			} catch (Exception e) {
-				
-			}
+			probList.add(roundOff(Statistic.combination(k, i) * Statistic.combination(bigN-k, smallN-i) / Statistic.combination(bigN, smallN)));
 		}
 
 		for (int i = 0; i < probList.size(); i++) {
@@ -67,7 +63,6 @@ public class Model {
 		dataset = new DefaultCategoryDataset();
 		int j = 0;
 		for(int i = x1; i <= x2; i++) {
-			//dataset.setValue(probList.get(j), Double.toString(probList.get(j)), Integer.toString(i));
 			dataset.setValue(probList.get(j), "Probability", Integer.toString(i));
 			j++;
 		}
