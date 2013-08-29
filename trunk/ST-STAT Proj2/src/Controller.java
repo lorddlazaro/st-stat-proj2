@@ -461,7 +461,6 @@ public class Controller {
 			myView.drawGraph(myModel.getGraph());
 			
 			populateTheProbDistTable();
-			myView.validate();
 		}
 		
 	}
@@ -479,7 +478,6 @@ public class Controller {
 			myView.drawGraph(myModel.getGraph());
 			
 			populateTheProbDistTable();
-			myView.validate();
 		}
 		
 	}
