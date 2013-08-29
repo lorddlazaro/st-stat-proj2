@@ -116,6 +116,7 @@ public class Controller {
 	
 	        	myView.getTxtSmallN().setEditable(true);
 	        	myView.getTxtK().setEditable(true);
+	        	myView.getTxtX1().setEditable(true);
 	        	myView.getTxtX2().setEditable(false);
 	        	myView.getSldrSmallN().setEnabled(false);
 	        	myView.getSldrK().setEnabled(false);
@@ -131,6 +132,7 @@ public class Controller {
 	        	
 	        	myView.getTxtSmallN().setEditable(true);
 	        	myView.getTxtK().setEditable(true);
+	        	myView.getTxtX1().setEditable(true);
 	        	myView.getTxtX2().setEditable(true);
 	        	myView.getSldrSmallN().setEnabled(false);
 	        	myView.getSldrK().setEnabled(false);
@@ -146,7 +148,8 @@ public class Controller {
 	        	
 	        	myView.getTxtSmallN().setEditable(false);
 	        	myView.getTxtK().setEditable(true);
-	        	myView.getTxtX2().setEditable(true);
+	        	myView.getTxtX1().setEditable(false);
+	        	myView.getTxtX2().setEditable(false);
 	        	myView.getSldrSmallN().setEnabled(true);
 	        	myView.getSldrK().setEnabled(false);
 	        	
@@ -161,7 +164,8 @@ public class Controller {
 	        	
 	        	myView.getTxtSmallN().setEditable(true);
 	        	myView.getTxtK().setEditable(false);
-	        	myView.getTxtX2().setEditable(true);
+	        	myView.getTxtX1().setEditable(false);
+	        	myView.getTxtX2().setEditable(false);
 	        	myView.getSldrSmallN().setEnabled(false);
 	        	myView.getSldrK().setEnabled(true);
 	        	
@@ -222,14 +226,25 @@ public class Controller {
 		if (valid) {
 			String str = "";
 			
-			if (!(myModel.getX1() <= myModel.getSmallN1()))
-				str = str.concat("x <= n");
+			// sample size <= population size
+			if (!(myModel.getSmallN1() <= myModel.getBigN()))
+				str = str.concat("n <= N");
 			
+			// total number of success <= population size
+			if (!(myModel.getK1() <= myModel.getBigN()))
+				str = str.concat("\nk <= N");
+				
+			// success in sample size <= population size
+			if (!(myModel.getX1() < myModel.getBigN()))
+				str = str.concat("\nx <= N");
+			
+			// success in sample size <= sample size
+			if (!(myModel.getX1() <= myModel.getSmallN1()))
+				str = str.concat("\nx <= n");
+			
+			// success in sample size <= total number of success
 			if (!(myModel.getX1() <= myModel.getK1()))
 				str = str.concat("\nx <= k");
-			
-			if (!(myModel.getK1() + myModel.getSmallN1() <= myModel.getBigN()))
-				str = str.concat("\nn + k <= N");
 			
 			if (str.isEmpty()) {
 				valid = true;
@@ -261,12 +276,15 @@ public class Controller {
 		if (valid) {
 			String str = "";
 			
-			if (!(myModel.getX1() <= myModel.getX2()))
-				str = str.concat("x1 <= x2");
+			// lower bound x < upper bound x
+			if (!(myModel.getX1() < myModel.getX2()))
+				str = str.concat("x1 < x2");
 
+			// success in sample size <= sample size
 			if (!(myModel.getX2() <= myModel.getK1()))
 				str = str.concat("\nx2 <= k");
 			
+			// success in sample size <= total number of success
 			if (!(myModel.getX2() <= myModel.getSmallN1()))
 					str = str.concat("\nx2 <= n");
 			
@@ -304,7 +322,16 @@ public class Controller {
 		
 		try {
 			myView.getTxtX1().setBackground(Color.WHITE);
-			myModel.setX1(myView.getX1());
+			myModel.setX1(1);
+			valid = true;
+		} catch (Exception ex) {
+			myView.getTxtX1().setBackground(Color.PINK);
+			valid = false;
+		}
+		
+		try {
+			myView.getTxtX2().setBackground(Color.WHITE);
+			myModel.setX2(myModel.getK1());
 			valid = true;
 		} catch (Exception ex) {
 			myView.getTxtX1().setBackground(Color.PINK);
@@ -314,8 +341,8 @@ public class Controller {
 		if (valid) {
 			String str = "";
 			
-			if (!(myModel.getX1() <= myModel.getK1()))
-				str = str.concat("\nx <= k");
+			if (!(myModel.getK1() <= myModel.getBigN()))
+				str = str.concat("k <= N");
 			
 			if (str.isEmpty()) {
 				valid = true;
@@ -327,7 +354,7 @@ public class Controller {
 		return valid;
 	}
 	
-	private boolean isRangeKInputValid() { // PLEASE CHECK, DI KO KASI ALAM YUNG CONDITION FOR THE VALIDITY OF THE RANGE OF 'k'
+	private boolean isRangeKInputValid() {
 		boolean valid = false;
 		
 		try {
@@ -339,18 +366,19 @@ public class Controller {
 			valid = false;
 		}
 		
+		
 		try {
-			myView.getTxtK().setBackground(Color.WHITE);
-			myModel.setK1(myView.getK1());
+			myView.getTxtSmallN().setBackground(Color.WHITE);
+			myModel.setSmallN1(myView.getSmallN1());
 			valid = true;
 		} catch (Exception ex) {
-			myView.getTxtK().setBackground(Color.PINK);
+			myView.getTxtSmallN().setBackground(Color.PINK);
 			valid = false;
 		}
 		
 		try {
 			myView.getTxtX1().setBackground(Color.WHITE);
-			myModel.setX1(myView.getX1());
+			myModel.setX1(1);
 			valid = true;
 		} catch (Exception ex) {
 			myView.getTxtX1().setBackground(Color.PINK);
@@ -360,8 +388,8 @@ public class Controller {
 		if (valid) {
 			String str = "";
 			
-			if (!(myModel.getX1() <= myModel.getK1()))
-				str = str.concat("\nx <= k");
+			if (!(myModel.getSmallN1() <= myModel.getBigN()))
+				str = str.concat("n <= N");
 			
 			if (str.isEmpty()) {
 				valid = true;
@@ -420,8 +448,9 @@ public class Controller {
 
 		@Override
 		public void stateChanged(ChangeEvent e) {
+			myView.getTxtX2().setText(Integer.toString(myView.getSldrK().getValue()));
 			myView.getTxtK().setText(Integer.toString(myView.getSldrK().getValue()));
-			myModel.setSmallN1(myView.getSldrSmallN().getValue());
+			myModel.setK1(myView.getSldrK().getValue());
 			myModel.solveHyperGeomRangeX();
 			myModel.readyGraph("Range of Values for Random Variable 'x'");
 			myView.setProbability(myModel.roundOff(myModel.getProbability()));
@@ -480,11 +509,13 @@ public class Controller {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			myView.getTxtSmallN().setText(Integer.toString(myView.getX2()));
-			myModel.setSmallN1(myView.getSmallN1());
+			myView.getTxtSmallN().setText(Integer.toString(myModel.getX2()));
+			myView.getTxtX1().setText(Integer.toString(myModel.getX1()));
+			myView.getTxtX2().setText(Integer.toString(myModel.getX2()));
+			myModel.setSmallN1(myModel.getX2());
 			
-			if(isRangeNInputValid() && isInputX2Valid()) {
-				myView.addSldrNListener(new SliderNListener(), myModel.getX2(), myModel.getBigN()-myModel.getK1());
+			if(isRangeNInputValid()) {
+				myView.addSldrNListener(new SliderNListener(), myModel.getK1(), myModel.getBigN());
 			}
 			
 			System.out.println("Solve: Tab 3");
@@ -497,14 +528,13 @@ public class Controller {
 	class SolveTab4Listener implements ActionListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e) {			
-			if(isMainInputValid()) {
-				myView.getTxtK().setText(Integer.toString(myView.getX2()));
-				myModel.setK1(myView.getK1());
-
-				if(isRangeKInputValid() && isInputX2Valid()) {
-					myView.addSldrKListener(new SliderKListener(), myModel.getX2(), myModel.getBigN()-myModel.getK1());
-				}
+		public void actionPerformed(ActionEvent e) {
+			myModel.setK1(myModel.getX1());
+			myView.getTxtK().setText(Integer.toString(myModel.getK1()));
+			myView.getTxtX1().setText(Integer.toString(myModel.getX1()));
+			
+			if(isRangeKInputValid()) {
+				myView.addSldrKListener(new SliderKListener(), myModel.getX1(), myModel.getBigN());
 			}
 			
 			System.out.println("Solve: Tab 4");

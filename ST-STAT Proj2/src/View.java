@@ -212,6 +212,7 @@ public class View extends JFrame {
 		sldrSmallN.setBounds(39, 174, 148, 26);
 		inputPanel.add(sldrSmallN);
 		
+		// slider for k
 		lblK2 = new JLabel("k:");
 		lblK2.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblK2.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
@@ -378,12 +379,14 @@ public class View extends JFrame {
 		sldrSmallN.addChangeListener(listener);
 		sldrSmallN.setMinimum(min);
 		sldrSmallN.setMaximum(max);
+		sldrSmallN.setValue(min);
 	}
 	
 	public void addSldrKListener(ChangeListener listener, int min, int max) {
 		sldrK.addChangeListener(listener);
 		sldrK.setMinimum(min);
 		sldrK.setMaximum(max);
+		sldrK.setValue(min);
 	}
 	
 	/*
