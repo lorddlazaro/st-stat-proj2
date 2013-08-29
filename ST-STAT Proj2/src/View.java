@@ -418,8 +418,7 @@ public class View extends JFrame {
 		graph.setBounds(10, 21, 533, 368);
 		graphPanel.add(graph);
 		graphPanel.validate();
-		validate();
-		repaint();
+		graphPanel.repaint();
 	}
 	
 	public void setTblProbDist(Object[][] probValue, Object[] xValue) {
@@ -427,8 +426,7 @@ public class View extends JFrame {
 		tblProbDist.setBounds(10, 21, 729, 52);
 		tblProbDist.setRowSelectionAllowed(false);
 		probDistPanel.add(tblProbDist);
-		validate();
-		repaint();
+		probDistPanel.validate();
 	}
 	
 	/*
