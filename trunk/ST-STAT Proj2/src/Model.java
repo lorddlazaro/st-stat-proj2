@@ -48,10 +48,11 @@ public class Model {
 		probList = new ArrayList<Double>();
 
 		for(int i = x1; i <= x2; i++) {
-			/*probability += Statistic.combination(k1, i) * Statistic.combination(bigN-k1, smallN1-i) / Statistic.combination(bigN, smallN1);
-			probList.add(roundOff(probability));*/
-
-			probList.add(roundOff(Statistic.combination(k, i) * Statistic.combination(bigN-k, smallN-i) / Statistic.combination(bigN, smallN)));
+			try {
+				probList.add(roundOff(Statistic.combination(k, i) * Statistic.combination(bigN-k, smallN-i) / Statistic.combination(bigN, smallN)));
+			} catch (Exception e) {
+				
+			}
 		}
 
 		for (int i = 0; i < probList.size(); i++) {
