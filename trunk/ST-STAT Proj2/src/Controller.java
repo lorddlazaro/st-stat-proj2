@@ -58,8 +58,6 @@ public class Controller {
         	
         	myView.getTxtX2().setText(null);
         	myView.getTxtX2().setBackground(Color.WHITE);
-        	
-        	System.out.println("Clear Fields");
 		}
 	}
 	
@@ -73,7 +71,6 @@ public class Controller {
 		public void actionPerformed(ActionEvent arg0) {
 			String str = "Each group is tasked to develop a software (in C or Java) that simulates a hypergeometric probability distribution. This program can:\r\n1. Compute for the probability given a set of input parameters\r\n2. Compute for the total probability for a range of values for random variable x\r\n3. Show the probability in tabular form for the random variable x\r\n4. Graph the probability distribution\r\n5. Show a simulation of the graph as n increases (given a fixed N and k), and as k increases (given a fixed N and n)";
 			new InfoDialog(str, "View Specifications");
-			System.out.println("View Specs");
 		}
 	}
 	
@@ -87,7 +84,6 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			String str = "Hypergeometric Distribution\r\n\r\nProbability of selecting 'x' successes from the 'k' items labeled successes and 'n-k' failures from 'N-k' items labeled failures when a random sample of size 'n' is selected from 'N' items.\r\n - Random sample of size 'n' is selected without replacement from 'N' items\r\n - 'k' of the 'N' items may be classified as successes and 'N-k' are classified as failures\r\n - applied in acceptance sampling where lots of materials or parts are sampled in order to determine whether or not the entire lot is accepted\r\n\r\n------------------------------\r\nGiven:\r\nN = total items\r\nn = sample size \r\nk = total number of successes\r\nx = number of successes in sample size\r\n\r\nh(x; N, n, k) = combination(k, x) * combination(N-k, n-x) / combination(N, n)\r\n\r\n------------------------------\r\nFixed Parameters\r\n- Input N, n, k, x\r\n\r\n------------------------------\r\nRange of 'x'\r\n- Input N, n, k, lowerbound x, upperbound x\r\n\r\n------------------------------\r\n'n' Increases\r\n- Input N, lowerbound n, upperbound  n, k, x\r\n\r\n------------------------------\r\n'k' Increases\r\n- Input N, n, lowerbound k, upperbound  k, x";
 			new InfoDialog(str, "Help");
-			System.out.println("Help");
 		}
 	}
 	
@@ -104,9 +100,7 @@ public class Controller {
 		public void stateChanged(ChangeEvent e) {
 			JTabbedPane pane = (JTabbedPane) e.getSource();
 	        tabIndex = pane.getSelectedIndex();
-	        
-	        System.out.println("selectedIndex = " + tabIndex);
-	        
+	        	        
 	        switch(tabIndex) {
 	        case 0: // FIXED PARAMETERS
 	        	myView.getTab1().add(myView.getInputPanel());
@@ -433,7 +427,6 @@ public class Controller {
 		
 		for(int i = myModel.getX1(); i <= myModel.getX2(); i++) {
 			xValues[j] = "x = " + i;
-			System.out.println(xValues[j]);
 			j++;
 		}
 		
@@ -497,8 +490,6 @@ public class Controller {
 				myModel.solveHyperGeomDist();
 				myView.setProbability(myModel.roundOff(myModel.getProbability()));
 			}
-			
-			System.out.println("Solve: Tab 1");
 		}	
 	}
 	
@@ -516,9 +507,7 @@ public class Controller {
 				myView.drawGraph(myModel.getGraph());
 				
 				populateTheProbDistTable();
-			}
-			
-			System.out.println("Solve: Tab 2");
+			}	
 		}	
 	}
 	
@@ -531,9 +520,7 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {			
 			if(isRangeNInputValid()) {			
 				myView.addSldrNListener(new SliderNListener(), myModel.getK1(), myModel.getBigN());
-			}
-			
-			System.out.println("Solve: Tab 3");
+			}		
 		}	
 	}
 	
@@ -547,8 +534,6 @@ public class Controller {
 			if(isRangeKInputValid()) {				
 				myView.addSldrKListener(new SliderKListener(), myModel.getX2(), myModel.getBigN());
 			}
-			
-			System.out.println("Solve: Tab 4");
 		}	
 	}
 }
